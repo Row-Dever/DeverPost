@@ -4,7 +4,9 @@
     <Button v-if="!isUser">로그인</Button>
     <div v-else class="flex gap-2">
       <Button :on-click="goNewPostHandler">게시글작성하기</Button>
-      <Button :on-click="onLoginHandler">로그아웃</Button>
+      <Button :on-click="goMypageHandler">마이페이지</Button>
+      <Button :on-click="onLoginHandler">로그인</Button>
+      <Button :on-click="onSignupHandler">회원가입</Button>
     </div>
   </nav>
 </template>
@@ -20,5 +22,17 @@ const router = useRouter()
 
 const goNewPostHandler = () => {
   router.push('/newpost')
+}
+
+const onLoginHandler = () => {
+  router.push('/login')
+}
+
+const onSignupHandler = () => {
+  router.push('/signup')
+}
+
+const goMypageHandler = () => {
+  router.push('/mypage')
 }
 </script>
