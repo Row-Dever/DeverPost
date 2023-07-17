@@ -1,6 +1,6 @@
 import express from "express";
 import postRouter from "./routes/posts.js";
-import userRouter from "./routes/user.js";
+
 import { errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
@@ -20,8 +20,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/post", postRouter);
-
-app.use("/user", userRouter);
 
 app.use(errorHandler);
 
