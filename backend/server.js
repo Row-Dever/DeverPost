@@ -1,5 +1,6 @@
 import express from "express";
 import postRouter from "./routes/posts.js";
+// import users from "./routes/users.js";
 
 import { errorHandler } from "./middleware/errorMiddleware.js";
 
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/post", postRouter);
+// app.use("/users/info", users);
 
 app.use(errorHandler);
 
