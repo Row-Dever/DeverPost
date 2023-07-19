@@ -4,6 +4,8 @@ import Home from '../page/Home.vue'
 import Login from '../page/Login.vue'
 import Signup from '../page/Signup.vue'
 import Mypage from '../page/Mypage.vue'
+import NewPost from '../page/NewPost.vue'
+import PostDetail from '../page/PostDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +34,16 @@ const router = createRouter({
           path: 'mypage',
           name: 'mypage',
           component: Mypage
+        },
+        {
+          path: 'newpost/:pk?',
+          name: 'newpost',
+          component: NewPost
+        },
+        {
+          path: 'postdetail/:postId?',
+          name: 'postdetail',
+          component: PostDetail
         }
       ]
     }

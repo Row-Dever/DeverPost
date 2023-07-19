@@ -1,43 +1,41 @@
 import Posts from "../models/postsModel.js";
 
 export const getPosts = (req, res, next) => {
-  // 15
-  const { limit, skip } = req.query;
+  const { limit, cursorId } = req.query;
+  let nextCursor;
 
-  let start = 0;
-  console.log(skip);
-  if (skip <= 0) {
-    start = 1;
-  } else {
-    start = (skip - 1) * limit;
-  }
-
-  console.log(start);
-
-  Posts.fetchAll(limit, String(start))
+  Posts.fetchData(limit, Number(cursorId))
     .then(([rows, fieldData]) => {
-      res.status(200).json(rows);
+      nextCursor =
+        rows.length === Number(limit) ? rows[rows.length - 1].id : null;
+      res.status(200).json({
+        statsCode: 200,
+        message: "데이터를 성공적으로 가져왔습니다.",
+        data: rows,
+        nextCursor,
+      });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => next(err));
 };
 
 export const addPost = (req, res, next) => {
-  const { title, description, imgSrc, category, userName, userId } = req.body;
-
-  const post = new Posts(
-    title,
-    description,
-    imgSrc,
-    category,
-    userName,
-    userId
-  );
+  const { title, content, category, userId } = req.body;
+  const imgReg = /<img[^>]+src\s*=\s*['"]([^'"]+)['"][^>]*>/;
+  let imgSrc = imgReg.exec(content);
+  console.log(imgSrc);
+  if (imgSrc) {
+    imgSrc = imgSrc[1];
+  } else {
+    imgSrc = null;
+  }
+  const post = new Posts(title, content, category, userId, imgSrc);
 
   post
     .save()
     .then(() => {
       res.status(201).json({
-        message: "데이터 저장",
+        statsCode: 201,
+        message: "데이터 저장이 완료되었습니다.",
         post: post,
       });
     })
@@ -59,16 +57,26 @@ export const delPost = async (req, res, next) => {
   const postId = req.params.postId;
   await Posts.deleteById(postId);
   res.status(200).json({
+    statsCode: 200,
     message: "데이터가 성공적으로 삭제되었습니다.",
   });
 };
 
 export const updatePost = async (req, res, next) => {
   const postId = req.params.postId;
-  const { title, description } = req.body;
-  await Posts.updateById(postId, title, description);
+  const { title, content, category } = req.body;
+  const imgReg = /<img[^>]+src\s*=\s*['"]([^'"]+)['"][^>]*>/;
+  let imgSrc = imgReg.exec(content);
+  console.log(imgSrc);
+  if (imgSrc) {
+    imgSrc = imgSrc[1];
+  } else {
+    imgSrc = null;
+  }
+  await Posts.updateById(postId, title, content, category, imgSrc);
 
   res.status(200).json({
-    message: "데이터가 성공적으로 변경되었습니다.",
+    statsCode: 200,
+    message: "데이터가 성공적으로 변경 되었습니다.",
   });
 };
