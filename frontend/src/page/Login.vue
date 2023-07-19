@@ -21,12 +21,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
-const loggedInUser = ref(null)
 const showNotification = ref(false)
 const notificationMessage = ref('')
 const router = useRouter()
@@ -45,7 +44,8 @@ const login = async () => {
     if (data.success) {
       console.log('로그인 성공!')
       // 로그인 성공 시 홈 페이지로 이동
-      loggedInUser.value = data.user
+      // loggedInUser.value = data.user
+      localStorage.setItem('user', data.user) // Store user in localStorage
       router.push('/mypage')
     } else {
       // 로그인 실패 시 알림 띄우기

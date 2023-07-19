@@ -15,7 +15,7 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
 import Button from '../common/Button/Button.vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const isUser = ref(true)
 
