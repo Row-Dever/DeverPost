@@ -7,4 +7,11 @@ const pool = mysql.createPool({
   password: "dlghwns308@",
 });
 
+// const pool = mysql.createPool({
+//   host: "localhost",
+//   user: "root",
+//   database: "user_test",
+//   password: "po8610251.",
+// });
+
 export default pool.promise();

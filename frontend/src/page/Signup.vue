@@ -20,18 +20,29 @@
       </div>
       <button type="submit">회원가입</button>
     </form>
+    <teleport to="body">
+      <div v-if="showNotification" class="notification">
+        {{ notificationMessage }}
+      </div>
+    </teleport>
   </div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { getCurrentInstance } from 'vue'
 
 const username = ref('')
 const email = ref('')
 const password = ref('')
 const telephone = ref('')
+const showNotification = ref(false)
+const notificationMessage = ref('')
+const router = useRouter()
 
 const signup = async () => {
+  // const instance = getCurrentInstance()
   try {
     const response = await fetch('http://localhost:8800/user', {
       method: 'POST',
@@ -46,8 +57,35 @@ const signup = async () => {
 
     const data = await response.json()
     console.log(data) // 성공 또는 실패에 대한 응답 확인
+
+    if (data.success) {
+      // 회원가입 성공 시 알림 띄우기
+      showNotification.value = true
+      notificationMessage.value = '회원가입이 성공적으로 완료되었습니다.'
+
+      // 2초 후 알림 숨기기
+      setTimeout(() => {
+        showNotification.value = false
+      }, 2000)
+
+      // // 로그인 페이지로 이동
+      router.push('/login')
+    }
   } catch (error) {
     console.error('Error:', error)
   }
 }
 </script>
+
+<style>
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+</style>

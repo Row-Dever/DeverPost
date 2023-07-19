@@ -12,15 +12,24 @@
       </div>
       <button type="submit">로그인</button>
     </form>
+    <teleport to="body">
+      <div v-if="showNotification" class="notification">
+        {{ notificationMessage }}
+      </div>
+    </teleport>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
-
+const loggedInUser = ref(null)
+const showNotification = ref(false)
+const notificationMessage = ref('')
+const router = useRouter()
 const login = async () => {
   try {
     const response = await fetch('http://localhost:8800/user/login', {
@@ -35,9 +44,16 @@ const login = async () => {
     const data = await response.json()
     if (data.success) {
       console.log('로그인 성공!')
-      // 예를 들어 로그인 성공 시 홈 페이지로 이동하도록 할 수 있습니다.
+      // 로그인 성공 시 홈 페이지로 이동
+      loggedInUser.value = data.user
+      router.push('/mypage')
     } else {
-      console.error(data.message)
+      // 로그인 실패 시 알림 띄우기
+      showNotification.value = true
+      notificationMessage.value = '이메일 또는 비밀번호가 일치하지 않습니다.'
+      setTimeout(() => {
+        showNotification.value = false
+      }, 5000)
     }
   } catch (error) {
     console.error('Error:', error)
