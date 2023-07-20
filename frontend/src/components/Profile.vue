@@ -3,19 +3,19 @@
     <ul>
       <li>
         <dt>이름</dt>
-        <dd>{{ state.username }}</dd>
+        <dd>{{ user.username }}</dd>
       </li>
       <li>
         <dt>이메일</dt>
-        <dd>{{ state.email }}</dd>
+        <dd>{{ user.email }}</dd>
       </li>
       <li>
         <dt>비밀번호</dt>
-        <dd>{{ state.password }}</dd>
+        <dd>{{ user.password }}</dd>
       </li>
       <li>
         <dt>전화번호</dt>
-        <dd>{{ state.telephone }}</dd>
+        <dd>{{ user.telephone }}</dd>
       </li>
     </ul>
   </div>
@@ -24,10 +24,10 @@
 <script setup>
 import { defineProps, watch } from 'vue'
 
-const props = defineProps(['state'])
+const props = defineProps(['user'])
 
 watch(props, () => {
-  console.log(props.state)
+  console.log(props.user)
 })
 </script>
 

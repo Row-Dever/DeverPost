@@ -30,5 +30,3 @@ export const useUserStore = defineStore('user', {
     }
   }
 })
-
-// main.js 파일 등에서 user 스토어를 등록해줘야 합니다.

@@ -2,8 +2,6 @@ import express from "express";
 import postRouter from "./routes/posts.js";
 import db from "./util/database.js";
 import bcrypt from "bcrypt";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 
 import { errorHandler } from "./middleware/errorMiddleware.js";
@@ -12,8 +10,6 @@ const app = express();
 const port = 8800;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(bodyParser.json());
 
 const jwtKey = "abc1234567";
 
@@ -32,14 +28,26 @@ app.use("/post", postRouter);
 
 app.use(errorHandler);
 
-// app.get()을 사용하여 res(응답)에 data를 보내줌
+// 사용자 정보 조회
 app.get("/user/myinfo", async (req, res) => {
-  // 쿼리 입력하여 에러가 없다면 res에게 data 전송
-  const [data, headers] = await db.query(
-    `SELECT * FROM users`
-    // `SELECT * FROM users where id = ${req.body.userId}`
-  );
-  res.json(data);
+  try {
+    const query =
+      "SELECT username, email, password, telephone FROM users WHERE id = ?"; // 현재 로그인한 사용자의 id에 해당하는 정보만 조회
+    const [result, fields] = await db.query(query, [req.userId]); // req.userId는 로그인 시 저장한 토큰의 사용자 id
+    if (result.length > 0) {
+      res.json({ success: true, data: result[0] });
+    } else {
+      res
+        .status(404)
+        .json({ success: false, message: "사용자 정보를 찾을 수 없습니다." });
+    }
+  } catch (error) {
+    console.error("에러:", error);
+    res.status(500).json({
+      success: false,
+      message: "사용자 정보를 가져오는 중 오류가 발생하였습니다.",
+    });
+  }
 });
 
 // 회원가입
@@ -55,7 +63,12 @@ app.post("/user", async (req, res) => {
     // 사용자 정보를 삽입하는 쿼리
     const query =
       "INSERT INTO users (username, email, password, telephone) VALUES (?, ?, ?, ?)";
-    result = db.query(query, [username, email, hashedPassword, telephone]);
+    const result = db.query(query, [
+      username,
+      email,
+      hashedPassword,
+      telephone,
+    ]);
 
     res.json({
       success: true,
@@ -85,7 +98,7 @@ app.post("/user/login", async (req, res) => {
       if (passwordMatches) {
         // 로그인 성공 시 토큰 발행 및 데이터베이스에 저장
         const accessToken = jwt.sign({ id: user.id }, jwtKey, {
-          expiresIn: "1h",
+          expiresIn: "1s",
         });
         const refreshToken = jwt.sign({ id: user.id }, jwtKey, {
           expiresIn: "7d",
