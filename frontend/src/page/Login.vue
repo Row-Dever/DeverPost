@@ -23,12 +23,16 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
 const email = ref('')
 const password = ref('')
 const showNotification = ref(false)
 const notificationMessage = ref('')
 const router = useRouter()
+
+const userStore = useUserStore() // 유저 스토어 사용
+
 const login = async () => {
   try {
     const response = await fetch('http://localhost:8800/user/login', {
@@ -43,10 +47,11 @@ const login = async () => {
     const data = await response.json()
     if (data.success) {
       console.log('로그인 성공!')
-      // 로그인 성공 시 홈 페이지로 이동
-      // loggedInUser.value = data.user
-      localStorage.setItem('user', data.user) // Store user in localStorage
+      // localStorage.setItem('user', JSON.stringify(data.result)) // 유저 데이터를 localStorage에 저장
+      userStore.loginSuccess(data.result, data.accessToken, data.refreshToken)
+      // 로그인 성공 시 마이페이지로 이동
       router.push('/mypage')
+      // result.value = data.result
     } else {
       // 로그인 실패 시 알림 띄우기
       showNotification.value = true

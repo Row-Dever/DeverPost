@@ -2,6 +2,9 @@ import express from "express";
 import postRouter from "./routes/posts.js";
 import db from "./util/database.js";
 import bcrypt from "bcrypt";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import jwt from "jsonwebtoken";
 
 import { errorHandler } from "./middleware/errorMiddleware.js";
 
@@ -9,6 +12,10 @@ const app = express();
 const port = 8800;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(bodyParser.json());
+
+const jwtKey = "abc1234567";
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -63,6 +70,7 @@ app.post("/user", async (req, res) => {
   }
 });
 
+//로그인
 app.post("/user/login", async (req, res) => {
   const { email, password } = req.body;
   console.log(email, password);
@@ -75,7 +83,25 @@ app.post("/user/login", async (req, res) => {
       const passwordMatches = await bcrypt.compare(password, user.password);
 
       if (passwordMatches) {
-        res.json({ success: true, message: "로그인 성공!" });
+        // 로그인 성공 시 토큰 발행 및 데이터베이스에 저장
+        const accessToken = jwt.sign({ id: user.id }, jwtKey, {
+          expiresIn: "1h",
+        });
+        const refreshToken = jwt.sign({ id: user.id }, jwtKey, {
+          expiresIn: "7d",
+        });
+
+        // 토큰 정보를 데이터베이스에 저장
+        const insertTokenQuery =
+          "INSERT INTO tokens (id, access_token, refresh_token) VALUES (?, ?, ?)";
+        await db.query(insertTokenQuery, [user.id, accessToken, refreshToken]);
+
+        res.json({
+          success: true,
+          message: "로그인 성공!",
+          accessToken,
+          refreshToken,
+        });
       } else {
         res.status(401).json({
           success: false,

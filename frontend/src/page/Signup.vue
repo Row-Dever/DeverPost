@@ -4,7 +4,8 @@
     <form @submit.prevent="signup">
       <div>
         <label for="username">사용자명:</label>
-        <input type="text" id="username" v-model="username" required />
+        <input type="text" id="username" v-model="username" pattern="[가-힣a-zA-Z\s]+" required />
+        <!-- pattern="[가-힣a-zA-Z\s]+"로 설정하여 한글, 영문, 공백만 입력 가능하도록 함 -->
       </div>
       <div>
         <label for="email">이메일:</label>
@@ -12,11 +13,26 @@
       </div>
       <div>
         <label for="password">비밀번호:</label>
-        <input type="password" id="password" v-model="password" required />
+        <input
+          type="password"
+          id="password"
+          v-model="password"
+          minlength="4"
+          maxlength="12"
+          required
+        />
+        <!-- minlength="4"와 maxlength="12"로 비밀번호 글자 수 제한 -->
       </div>
       <div>
         <label for="telephone">전화번호:</label>
-        <input type="telephone" id="telephone" v-model="telephone" required />
+        <input
+          type="tel"
+          id="telephone"
+          v-model="telephone"
+          pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}"
+          required
+        />
+        <!-- pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}"로 설정하여 전화번호 형식 XXX-XXX-XXXX 또는 XXX-XXXX-XXXX로 표시 -->
       </div>
       <button type="submit">회원가입</button>
     </form>
