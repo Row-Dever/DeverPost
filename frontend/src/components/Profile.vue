@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul>
+    <ul v-if="user">
       <li>
         <dt>이름</dt>
         <dd>{{ user.username }}</dd>
@@ -18,17 +18,17 @@
         <dd>{{ user.telephone }}</dd>
       </li>
     </ul>
+    <div v-else>
+      <!-- user 객체가 null일 때 처리할 내용 -->
+      사용자 정보를 불러올 수 없습니다.
+    </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, watch } from 'vue'
+import { defineProps } from 'vue'
 
 const props = defineProps(['user'])
-
-watch(props, () => {
-  console.log(props.user)
-})
 </script>
 
 <style scoped>
