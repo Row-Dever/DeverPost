@@ -1,11 +1,7 @@
 <template>
   <div>
-    <li>
-      <dt>안녕하세요.</dt>
-      <dd>{{ user.username }}</dd>
-      <dd>님 반갑습니다 !</dd>
-    </li>
     <ul v-if="user">
+      <h1>안녕하세요 {{ user.username }} 님 반갑습니다.</h1>
       <li>
         <dt>이름:</dt>
         <dd>{{ user.username }}</dd>

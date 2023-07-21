@@ -1,0 +1,137 @@
+[33mcommit 5199609be82415e640b5577f22ea53992a3e8c30[m[33m ([m[1;36mHEAD -> [m[1;32mwilson[m[33m)[m
+Author: DongEun89 <wilson.kim@devercorp.com>
+Date:   Fri Jul 21 10:09:08 2023 +0900
+
+    feat: 마이페이지 기능 구현
+
+[33mcommit a65c91e5290ffbbd5c740644c0ba085fb17d7c7d[m[33m ([m[1;31morigin/wilson[m[33m)[m
+Author: DongEun89 <wilson.kim@devercorp.com>
+Date:   Thu Jul 20 18:07:58 2023 +0900
+
+    fix: 프로필 정보 조회 구현 중
+
+[33mcommit 08db41144a52828bd2afcd0b437e62a75d7849ca[m
+Author: DongEun89 <wilson.kim@devercorp.com>
+Date:   Thu Jul 20 15:30:14 2023 +0900
+
+    feat: 토큰 로컬스토리지 저장
+
+[33mcommit 4771c6b7892b79130b611fc5e7d0dfe731ccd68b[m
+Author: DongEun89 <wilson.kim@devercorp.com>
+Date:   Thu Jul 20 14:07:02 2023 +0900
+
+    feat: 로그인 시 토큰 발행
+
+[33mcommit d4c884700974dcde507b17a543b6e518ff97a702[m
+Author: DongEun89 <wilson.kim@devercorp.com>
+Date:   Wed Jul 19 17:55:23 2023 +0900
+
+    fix: 로그인,회원가입 기능 구현
+
+[33mcommit 408c00511b38e2549282cf18807632e7ac134388[m[33m ([m[1;32mmain[m[33m)[m
+Author: DongEun89 <wilson.kim@devercorp.com>
+Date:   Wed Jul 19 16:53:49 2023 +0900
+
+    fix: 로그인,회원가입, 라우터 구현
+
+[33mcommit 3711a28b59d2725e0baf592b2cc54bfd2e408468[m
+Author: DongEun89 <wilson.kim@devercorp.com>
+Date:   Tue Jul 18 15:38:07 2023 +0900
+
+    feat: 회원가입 기능 구현
+
+[33mcommit 6d76e408ca41ac16d46abd44b575ff33a4846c15[m
+Author: DongEun89 <wilson.kim@devercorp.com>
+Date:   Tue Jul 18 13:56:32 2023 +0900
+
+    fix: db와 백 연동
+
+[33mcommit a4a37c42e9b80707a19fbaebcacebc80df00800c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Mon Jul 17 17:56:26 2023 +0900
+
+    modify: database.js host변경
+
+[33mcommit 37c4298d07a548f5754cdb370acf7d82abc69733[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Mon Jul 17 17:50:02 2023 +0900
+
+    modify: 외부 node_modules삭제
+
+[33mcommit 68054b042604c4daf328bcbd6b1784aef1f644a4[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Mon Jul 17 17:45:43 2023 +0900
+
+    feat: 게시글 MVC REST API 생성
+
+[33mcommit 3fcdec5ffb9744bcc679b3a7dc37c4cd556c6596[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Mon Jul 17 17:44:51 2023 +0900
+
+    init: 서버 초기세팅
+
+[33mcommit 501e02f8fa74f9dd7806d797efa60c1f5e5e1e5d[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Mon Jul 17 17:39:53 2023 +0900
+
+    modify: 라우트 경로 재설정
+
+[33mcommit 06e15c02c18ed16f0a9390e24ebabca0623b974e[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Mon Jul 17 17:39:18 2023 +0900
+
+    feat: dateformat.js utils 생성
+
+[33mcommit 87dc402b09261c6da255a51a544f8bddbc146b9b[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Mon Jul 17 17:38:52 2023 +0900
+
+    init: 기본 api설정 및 posts api 생성
+
+[33mcommit 68d552a318b870e02bbfe14c8929eedaeb7e6599[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Mon Jul 17 17:38:11 2023 +0900
+
+    feat: PostList PostItem 컴포넌트 생성
+
+[33mcommit cd62c6c8258944d887db160fa96c71b0ceeeef2d[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Mon Jul 17 17:36:59 2023 +0900
+
+    feat: 공통 Input 컴포넌트 생성
+
+[33mcommit b164a75a2c67ead7120df95cb9de2fb5b769e7e2[m
+Author: DongEun89 <wilson.kim@devercorp.com>
+Date:   Fri Jul 14 10:58:21 2023 +0900
+
+    라우팅 및 입력폼 구현
+
+[33mcommit 9e80461e91720fe6a8355b7b4439dace33434395[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Thu Jul 13 16:53:04 2023 +0900
+
+    feat: Layout, Home page 생성 및 라우트 초기설정
+
+[33mcommit 532226d476749d3da7c569372ca812ba2642a5a1[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Thu Jul 13 16:52:14 2023 +0900
+
+    feat: Header 컴포넌트 생성
+
+[33mcommit 0458cb213864542dd560a33e422f9020ecccd449[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Thu Jul 13 16:51:59 2023 +0900
+
+    feat: 공통 Button 컴포넌트 생성
+
+[33mcommit 1ca08b6e3d9adb67d1fc17d9ea0d0553a1b965dd[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Thu Jul 13 16:51:39 2023 +0900
+
+    feat: Container컴포넌트 생성
+
+[33mcommit ffabbe46fd1465bfa30f002cb688f815c6688cae[m
+Author: Row-Dever <138644103+Row-Dever@users.noreply.github.com>
+Date:   Thu Jul 13 14:56:31 2023 +0900
+
+    init: 초기세팅

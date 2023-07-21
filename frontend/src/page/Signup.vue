@@ -36,18 +36,16 @@
       </div>
       <button type="submit">회원가입</button>
     </form>
-    <teleport to="body">
-      <div v-if="showNotification" class="notification">
-        {{ notificationMessage }}
-      </div>
-    </teleport>
+    <div v-if="showNotification" class="notification">
+      {{ notificationMessage }}
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import Input from '@/Input/Input.vue'
+// import Input from '@/Input/Input.vue'
 
 const username = ref('')
 const email = ref('')
@@ -82,7 +80,7 @@ const signup = async () => {
       // 2초 후 알림 숨기기
       setTimeout(() => {
         showNotification.value = false
-      }, 2000)
+      }, 8000)
 
       // // 로그인 페이지로 이동
       router.push('/login')
