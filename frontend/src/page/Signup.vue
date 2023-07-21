@@ -1,51 +1,51 @@
 <template>
-  <div>
-    <h2>회원가입</h2>
-    <form @submit.prevent="signup">
-      <div>
-        <label for="username">사용자명:</label>
-        <input type="text" id="username" v-model="username" pattern="[가-힣a-zA-Z\s]+" required />
-        <!-- pattern="[가-힣a-zA-Z\s]+"로 설정하여 한글, 영문, 공백만 입력 가능하도록 함 -->
-      </div>
-      <div>
-        <label for="email">이메일:</label>
-        <input type="email" id="email" v-model="email" required />
-      </div>
-      <div>
-        <label for="password">비밀번호:</label>
-        <input
-          type="password"
-          id="password"
-          v-model="password"
-          minlength="4"
-          maxlength="12"
-          required
-        />
-        <!-- minlength="4"와 maxlength="12"로 비밀번호 글자 수 제한 -->
-      </div>
-      <div>
-        <label for="telephone">전화번호:</label>
-        <input
-          type="tel"
-          id="telephone"
-          v-model="telephone"
-          pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}"
-          required
-        />
-        <!-- pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}"로 설정하여 전화번호 형식 XXX-XXX-XXXX 또는 XXX-XXXX-XXXX로 표시 -->
-      </div>
-      <button type="submit">회원가입</button>
+  <div class="mt-32">
+    <h2 class="ir">회원가입</h2>
+    <form @submit.prevent="signup" class="flex flex-col justify-center items-center gap-6">
+      <Input
+        type="text"
+        id="username"
+        label="이름"
+        v-model="username"
+        pattern="[가-힣a-zA-Z\s]+"
+        required
+      />
+      <!-- pattern="[가-힣a-zA-Z\s]+"로 설정하여 한글, 영문, 공백만 입력 가능하도록 함 -->
+      <Input label="이메일" type="email" id="email" v-model="email" required />
+      <Input
+        type="password"
+        id="password"
+        label="비밀번호"
+        v-model="password"
+        minlength="4"
+        maxlength="12"
+        required
+      />
+      <!-- minlength="4"와 maxlength="12"로 비밀번호 글자 수 제한 -->
+      <Input
+        type="tel"
+        id="telephone"
+        label="전화번호"
+        v-model="telephone"
+        pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}"
+        required
+      />
+      <!-- pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}"로 설정하여 전화번호 형식 XXX-XXX-XXXX 또는 XXX-XXXX-XXXX로 표시 -->
+      <Button size="lg">회원가입</Button>
     </form>
-    <div v-if="showNotification" class="notification">
-      {{ notificationMessage }}
-    </div>
+    <teleport to="body">
+      <div v-if="showNotification" class="notification">
+        {{ notificationMessage }}
+      </div>
+    </teleport>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-// import Input from '@/Input/Input.vue'
+import Input from '../components/common/Input/Input.vue'
+import Button from '../components/common/Button/Button.vue'
 
 const username = ref('')
 const email = ref('')
@@ -74,12 +74,12 @@ const signup = async () => {
 
     if (data.success) {
       // 회원가입 성공 시 알림 띄우기
-      showNotification.value = true
+      showNotification.value = false
       notificationMessage.value = '회원가입이 성공적으로 완료되었습니다.'
 
       // 2초 후 알림 숨기기
       setTimeout(() => {
-        showNotification.value = false
+        showNotification.value = true
       }, 8000)
 
       // // 로그인 페이지로 이동

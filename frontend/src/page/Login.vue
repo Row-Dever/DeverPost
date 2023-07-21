@@ -1,16 +1,18 @@
 <template>
-  <div>
-    <h2>로그인</h2>
-    <form @submit.prevent="login">
-      <div>
-        <label for="email">이메일:</label>
-        <input type="email" id="email" v-model="email" required />
-      </div>
-      <div>
-        <label for="password">비밀번호:</label>
-        <input type="password" id="password" v-model="password" required />
-      </div>
-      <button type="submit">로그인</button>
+  <div class="mt-32">
+    <h2 class="ir">로그인</h2>
+    <form @submit.prevent="login" class="flex flex-col justify-center items-center gap-6">
+      <Input label="이메일" type="email" id="email" v-model="email" required />
+      <Input
+        type="password"
+        id="password"
+        label="비밀번호"
+        v-model="password"
+        minlength="4"
+        maxlength="12"
+        required
+      />
+      <Button size="lg">로그인</Button>
     </form>
     <teleport to="body">
       <div v-if="showNotification" class="notification">
@@ -24,6 +26,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import Input from '../components/common/Input/Input.vue'
+import Button from '../components/common/Button/Button.vue'
 
 const email = ref('')
 const password = ref('')

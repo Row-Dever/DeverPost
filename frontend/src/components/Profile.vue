@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul v-if="user">
-      <h1>안녕하세요 {{ user.username }} 님 반갑습니다.</h1>
+      <h1 class="text-center">안녕하세요 {{ user.username }} 님 반갑습니다.</h1>
       <li>
         <dt>이름:</dt>
         <dd>{{ user.username }}</dd>
@@ -14,6 +14,8 @@
         <dt>전화번호 :</dt>
         <dd>{{ user.telephone }}</dd>
       </li>
+      <Button size="md">정보 수정</Button>
+      <Button size="md">회원 탈퇴</Button>
     </ul>
     <div v-else>
       <!-- user 객체가 null일 때 처리할 내용 -->
@@ -24,6 +26,7 @@
 
 <script setup>
 import { defineProps } from 'vue'
+import Button from '../components/common/Button/Button.vue'
 
 const props = defineProps(['user'])
 </script>

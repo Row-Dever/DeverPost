@@ -5,6 +5,7 @@
       :id="id"
       :type="props.type"
       v-model="value"
+      :pattern="props.pattern"
       class="border-b-2 focus:border-orange-300 outline-none"
       @input="onValidationHandler"
     />
@@ -23,6 +24,7 @@ const props = defineProps({
   id: String,
   type: { type: String, default: 'text' },
   input: String,
+  pattern: String,
   modelValue: String,
   onvalidation: Function
 })
