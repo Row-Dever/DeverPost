@@ -24,18 +24,36 @@ export default class Posts {
   static fetchData(limit, cursorId) {
     if (cursorId) {
       return db.execute(
-        "SELECT * FROM posts WHERE id < ? ORDER BY id DESC LIMIT ?",
+        "SELECT p.id, p.created_at, p.title, p.content, p.category, p.imgsrc, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id WHERE p.id < ? ORDER BY p.id DESC LIMIT ?",
         [cursorId, limit]
       );
     } else {
-      return db.execute("SELECT * FROM posts ORDER BY id DESC LIMIT ?", [
-        limit,
-      ]);
+      return db.execute(
+        "SELECT p.id, p.created_at, p.title, p.content, p.category, p.imgsrc, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id ORDER BY p.id DESC LIMIT ?",
+        [limit]
+      );
+    }
+  }
+
+  static fetchKeywordData(limit, cursorId, keyword) {
+    if (cursorId) {
+      return db.execute(
+        "SELECT p.id, p.created_at, p.title, p.content, p.category, p.imgsrc, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id WHERE p.id < ? && p.title like CONCAT('%', ?, '%') ORDER BY p.id DESC LIMIT ?",
+        [cursorId, keyword, limit]
+      );
+    } else {
+      return db.execute(
+        "SELECT p.id, p.created_at, p.title, p.content, p.category, p.imgsrc, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id WHERE p.title like CONCAT('%', ?, '%') ORDER BY p.id DESC LIMIT ?",
+        [keyword, limit]
+      );
     }
   }
 
   static findById(id) {
-    return db.query("SELECT * FROM posts WHERE id = ?", [id]);
+    return db.query(
+      "SELECT p.id, p.title, p.content, p.category, p.imgsrc, p.created_at, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id WHERE p.id = ?",
+      [id]
+    );
   }
 
   static updateById(id, title, content, category, imgsrc) {

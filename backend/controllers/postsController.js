@@ -18,11 +18,59 @@ export const getPosts = (req, res, next) => {
     .catch((err) => next(err));
 };
 
+export const getKeywordPosts = async (req, res, next) => {
+  const { limit, cursorId, keyword } = req.query;
+  let nextCursor;
+
+  if (keyword === "undefined") {
+    Posts.fetchData(limit, Number(cursorId))
+      .then(([rows, fieldData]) => {
+        nextCursor =
+          rows.length === Number(limit) ? rows[rows.length - 1].id : null;
+        res.status(200).json({
+          statsCode: 200,
+          message: "데이터를 성공적으로 가져왔습니다.",
+          data: rows,
+          nextCursor,
+        });
+      })
+      .catch((err) => next(err));
+  } else {
+    Posts.fetchKeywordData(limit, Number(cursorId), keyword)
+      .then(([rows, fieldData]) => {
+        let message = "데이터를 성공적으로 가져왔습니다.";
+        if (rows.length === 0) {
+          message = "원하는 데이터를 찾지 못했습니다.";
+        }
+        nextCursor =
+          rows.length === Number(limit) ? rows[rows.length - 1].id : null;
+        res.status(200).json({
+          statsCode: 200,
+          message,
+          data: rows,
+          nextCursor,
+        });
+      })
+      .catch((err) => next(err));
+  }
+};
+
+export const getPost = async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const [rows, fieldData] = await Posts.findById(postId);
+    const [data] = rows;
+    res.status(200).json(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const addPost = (req, res, next) => {
   const { title, content, category, userId } = req.body;
   const imgReg = /<img[^>]+src\s*=\s*['"]([^'"]+)['"][^>]*>/;
   let imgSrc = imgReg.exec(content);
-  console.log(imgSrc);
+
   if (imgSrc) {
     imgSrc = imgSrc[1];
   } else {
@@ -42,17 +90,6 @@ export const addPost = (req, res, next) => {
     .catch((error) => console.log(error));
 };
 
-export const getPost = async (req, res, next) => {
-  try {
-    const postId = req.params.postId;
-    const [rows, fieldData] = await Posts.findById(postId);
-    const [data] = rows;
-    res.status(200).json(data);
-  } catch (err) {
-    next(err);
-  }
-};
-
 export const delPost = async (req, res, next) => {
   const postId = req.params.postId;
   await Posts.deleteById(postId);
@@ -67,7 +104,7 @@ export const updatePost = async (req, res, next) => {
   const { title, content, category } = req.body;
   const imgReg = /<img[^>]+src\s*=\s*['"]([^'"]+)['"][^>]*>/;
   let imgSrc = imgReg.exec(content);
-  console.log(imgSrc);
+
   if (imgSrc) {
     imgSrc = imgSrc[1];
   } else {

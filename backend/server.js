@@ -10,8 +10,8 @@ const port = 8800;
 const __dirname = path.resolve();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// images폴더를 외부로 노출시키기 위해 작성된 미들웨어
 
+// images폴더를 외부로 노출시키기 위해 작성된 미들웨어
 app.use("/", express.static(path.join(__dirname, "/images")));
 
 app.use((req, res, next) => {
