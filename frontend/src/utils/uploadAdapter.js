@@ -6,7 +6,6 @@ const customUploadAdapter = (loader) => {
       return new Promise((resolve, reject) => {
         const data = new FormData()
         loader.file.then((file) => {
-          console.log(file)
           data.append('name', file.name)
           data.append('file', file)
 

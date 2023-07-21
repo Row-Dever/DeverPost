@@ -15,9 +15,10 @@ const router = createRouter({
       name: 'layout',
       component: Layout,
       children: [
+        { path: '/', name: 'home', component: Home },
         {
-          path: '/',
-          name: 'home',
+          path: '/:keyword',
+          name: 'keywordhome',
           component: Home
         },
         {
@@ -47,7 +48,8 @@ const router = createRouter({
         }
       ]
     }
-  ]
+  ],
+  linkActiveClass: 'active'
 })
 
 export default router
