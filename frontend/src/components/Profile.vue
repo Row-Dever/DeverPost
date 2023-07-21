@@ -4,7 +4,7 @@
       <h1 class="text-center">안녕하세요 {{ user.username }} 님 반갑습니다.</h1>
       <li>
         <dt>이름:</dt>
-        <dd>{{ user.username }}</dd>
+        <dd>{{ props.user.username }}</dd>
       </li>
       <li>
         <dt>이메일:</dt>
@@ -25,9 +25,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
 import Button from '../components/common/Button/Button.vue'
-
 const props = defineProps(['user'])
 </script>
 
@@ -44,7 +42,6 @@ ul {
 li {
   display: flex;
   align-items: center;
-  justify-content: start;
   margin-bottom: 10px;
   list-style-type: none;
 }

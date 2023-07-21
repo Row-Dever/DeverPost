@@ -17,11 +17,11 @@
     </form>
     <Button v-if="!isUser">로그인</Button>
     <div v-else class="flex gap-2">
-      <Button :on-click="goNewPostHandler">게시글작성하기</Button>
-      <Button :on-click="goMypageHandler">마이페이지</Button>
-      <Button :on-click="onLoginHandler">로그인</Button>
-      <Button :on-click="onSignupHandler">회원가입</Button>
-      <Button :on-click="onLoginHandler">로그아웃</Button>
+      <Button v-if="userStore.loggedInUser" :on-click="goNewPostHandler">게시글작성하기</Button>
+      <Button v-if="userStore.loggedInUser" :on-click="goMypageHandler">마이페이지</Button>
+      <Button v-if="userStore.loggedInUser" :on-click="onLogoutHandler">로그아웃</Button>
+      <Button v-if="!userStore.loggedInUser" :on-click="onSignupHandler">회원가입</Button>
+      <Button v-if="!userStore.loggedInUser" :on-click="onLoginHandler">로그인</Button>
     </div>
   </nav>
 </template>
@@ -30,10 +30,13 @@
 import { RouterLink, useRouter } from 'vue-router'
 import Button from '../common/Button/Button.vue'
 import { ref } from 'vue'
+import { useUserStore } from '../../stores/user'
 
 const isUser = ref(true)
 const searchKeyword = ref('')
 const router = useRouter()
+
+const userStore = useUserStore()
 
 const onKeywordHandler = (event) => {
   searchKeyword.value = event.target.value
@@ -47,6 +50,10 @@ const onLoginHandler = () => {
   router.push('/login')
 }
 
+const onLogoutHandler = () => {
+  userStore.logout()
+}
+
 const onSignupHandler = () => {
   router.push('/signup')
 }
@@ -57,8 +64,9 @@ const goMypageHandler = () => {
 
 const searchSubmitHandler = () => {
   if (searchKeyword.value.trim() === '') {
-    searchKeyword.value = ''
+    router.push('/')
+  } else {
+    router.push(`/?keyword=${searchKeyword.value}`)
   }
-  router.push(`/?keyword=${searchKeyword.value}`)
 }
 </script>
