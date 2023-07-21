@@ -3,11 +3,12 @@
     <Container class="flex flex-col gap-6">
       <h2 class="text-3xl font-bold">{{ postData.title }}</h2>
       <div class="flex text-sm opacity-80 gap-3">
-        <p>유저네임</p>
-        <p>프로필 정보</p>
-        <p>{{ formatDate(postData.created_at) }}</p>
+        <p>
+          작성자 <strong>{{ postData.username }}</strong>
+        </p>
+        <p>{{ formatDate(postData.created_at) }} 작성</p>
       </div>
-      <div class="ck-ck__content" v-html="postData.content"></div>
+      <div class="ck-ck__content border-t-2 border-gray-200" v-html="postData.content"></div>
       <Button @click="onDeletePosthandler">게시물 삭제</Button>
       <Button @click="onPutPostHandler">게시물 수정</Button>
     </Container>
@@ -29,7 +30,6 @@ const router = useRouter()
 const postId = route.params.postId
 
 const postData = ref({})
-console.log(postData.value)
 
 // 게시글 삭제 Handler
 const onDeletePosthandler = async () => {
@@ -39,6 +39,7 @@ const onDeletePosthandler = async () => {
   }
 }
 
+// 게시글 업데이트를 하기 위해 pk를 가지고 newpost페이지로 이동
 const onPutPostHandler = () => {
   router.push({
     name: 'newpost',
@@ -48,7 +49,6 @@ const onPutPostHandler = () => {
 
 onMounted(async () => {
   const { data } = await instance.get(`/post/${postId}`)
-  console.log(data)
   postData.value = data
 })
 </script>

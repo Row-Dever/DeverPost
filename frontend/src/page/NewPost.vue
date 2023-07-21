@@ -3,14 +3,18 @@
     <Container>
       <h2 class="ir">게시글작성페이지</h2>
       <form class="flex flex-col gap-6">
-        <Input label="제목" v-model="postTitleRef"></Input>
+        <Input
+          label="제목"
+          v-model="postTitleRef"
+          :onvalidation="onChangeTitleHandler"
+          @on-valid="onErrorHandler"
+        ></Input>
         <div>
           <span>카테고리를 선택해주세요.</span>
           <select
             name="카테고리"
             v-model="selectedValue"
             class="rounded-lg border-solid border-2 border-gray-200 p-2 w-full focus:border-mainOrange"
-            @change="onSelectHandler"
           >
             <option disabled hidden value="none" selected>선택</option>
             <option value="프론트">프론트</option>
@@ -20,8 +24,12 @@
           </select>
         </div>
         <CKEditor v-model="editorData" :config="editorConfig" :editor="ClassicEditor" />
-        <Button v-if="route.params.pk" @click.prevent="onPutPostHandler">게시물 수정완료</Button>
-        <Button v-else @click.prevent="onNewPostHandler">게시물작성완료</Button>
+        <Button v-if="route.params.pk" @click.prevent="onPutPostHandler" passed
+          >게시물수정완료</Button
+        >
+        <Button v-else @click.prevent="onNewPostHandler" :disabled="!titleValid.isValid"
+          >게시물작성완료</Button
+        >
       </form>
     </Container>
   </section>
@@ -43,13 +51,22 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 const editorData = ref()
 const postTitleRef = ref('')
 const selectedValue = ref('none')
-
-const onSelectHandler = () => {
-  console.log(selectedValue.value)
-}
+const titleValid = ref({})
 
 const route = useRoute()
 const router = useRouter()
+
+const onChangeTitleHandler = (title) => {
+  if (title === '' || title.length === 0) {
+    return { errmessage: '제목이 입력되지 않았습니다.', isValid: false }
+  } else {
+    return { errmessage: '', isValid: true }
+  }
+}
+
+const onErrorHandler = (error) => {
+  titleValid.value = error
+}
 
 watch(
   () => route.params.pk,

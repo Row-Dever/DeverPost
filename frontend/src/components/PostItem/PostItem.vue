@@ -1,6 +1,6 @@
 <template>
   <li
-    class="flex flex-col items-center gap-1 m-2 border-2 rounded-md border-solid border-gray-200 p-2"
+    class="flex flex-col items-center justify-center gap-1 m-2 border-2 rounded-md border-solid border-gray-200 p-2"
     @click="goPostDetailHandler"
   >
     <img v-if="props.post.imgsrc" class="w-60 h-60" :src="props.post.imgsrc" alt="게시글이미지" />
@@ -9,7 +9,7 @@
         {{ props.post.title }}
       </p>
       <p class="text-sm opacity-80 line-clamp-2 my-1 break-words">{{ content }}</p>
-      <!-- <p class="text-sm opacity-80 text-center">{{ props.post.userName }}</p> -->
+      <p class="text-sm opacity-80 text-center">{{ props.post.username }}</p>
       <p>{{ date }}</p>
     </div>
   </li>
@@ -24,7 +24,8 @@ const props = defineProps({
   post: {
     title: String,
     content: String,
-    userId: Number,
+    userid: Number,
+    username: String,
     category: String,
     created_at: Date,
     id: Number
@@ -36,10 +37,10 @@ const date = computed(() => {
 })
 
 const contentReg = /<[^>]*>?/g
-const nbsp = /&nbsp;/g
+const nbspReg = /&nbsp;/g
 
 const content = computed(() => {
-  return props.post.content.replace(contentReg, '').replace(nbsp, '')
+  return props.post.content.replace(contentReg, '').replace(nbspReg, '')
 })
 
 const router = useRouter()
