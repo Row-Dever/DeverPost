@@ -29,7 +29,7 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
 import Button from '../common/Button/Button.vue'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 const isUser = ref(true)
 const searchKeyword = ref('')
@@ -59,6 +59,6 @@ const searchSubmitHandler = () => {
   if (searchKeyword.value.trim() === '') {
     searchKeyword.value = ''
   }
-  router.push(`/${searchKeyword.value}`)
+  router.push(`/?keyword=${searchKeyword.value}`)
 }
 </script>

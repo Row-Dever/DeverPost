@@ -8,6 +8,8 @@ import {
   getKeywordPosts,
 } from "../controllers/postsController.js";
 
+// import authChecker from "../middleware/authCheckMiddleware.js";
+
 const router = express.Router();
 
 router.use("/", (req, res, next) => {

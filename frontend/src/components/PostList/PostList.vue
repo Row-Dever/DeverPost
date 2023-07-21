@@ -35,7 +35,7 @@ const route = useRoute()
 
 const listEl = ref(null)
 const postData = ref([])
-const limit = 10
+const limit = 15
 
 const infiniteId = ref(0)
 const message = ref('')
@@ -43,10 +43,11 @@ let cursorId
 
 watch(
   () => {
-    return route.params.keyword
+    return route.query.keyword
   },
   () => {
     postData.value = []
+    cursorId = undefined
     changeInfiniteId()
   }
 )
@@ -57,7 +58,7 @@ const changeInfiniteId = () => {
 
 const infiniteHandler = async ($state) => {
   const { data: posts } = await instance.get(
-    `/post/?limit=${limit}&cursorId=${cursorId}&keyword=${route.params.keyword}`
+    `/post/?limit=${limit}&cursorId=${cursorId}&keyword=${route.query.keyword}`
   )
   cursorId = posts.nextCursor
   message.value = posts.message

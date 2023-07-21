@@ -13,7 +13,7 @@ const port = 8800;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const jwtKey = "abc1234567";
+export const jwtKey = "abc1234567";
 
 const __dirname = path.resolve();
 app.use(express.json());
@@ -107,7 +107,7 @@ app.post("/user/login", async (req, res) => {
       if (passwordMatches) {
         // 로그인 성공 시 토큰 발행 및 데이터베이스에 저장
         const accessToken = jwt.sign({ id: user.id }, jwtKey, {
-          expiresIn: "1s",
+          expiresIn: "1h",
         });
         const refreshToken = jwt.sign({ id: user.id }, jwtKey, {
           expiresIn: "7d",

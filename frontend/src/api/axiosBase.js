@@ -19,7 +19,7 @@ export const imgInstance = axios.create({
 export const accessInstance = axios.create({
   baseURL: url,
   headers: {
-    'Content-Type': 'application/json'
-  },
-  withCredentials: true
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+  }
 })

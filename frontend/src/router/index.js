@@ -17,7 +17,7 @@ const router = createRouter({
       children: [
         { path: '/', name: 'home', component: Home },
         {
-          path: '/:keyword',
+          path: '/?:keyword',
           name: 'keywordhome',
           component: Home
         },
