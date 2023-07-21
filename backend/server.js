@@ -31,8 +31,7 @@ app.use(errorHandler);
 // 사용자 정보 조회
 app.get("/user/myinfo", async (req, res) => {
   try {
-    const query =
-      "SELECT username, email, password, telephone FROM users WHERE id = ?"; // 현재 로그인한 사용자의 id에 해당하는 정보만 조회
+    const query = "SELECT username, email, telephone FROM users WHERE id = ?"; // 현재 로그인한 사용자의 id에 해당하는 정보만 조회
     const [result, fields] = await db.query(query, [req.userId]); // req.userId는 로그인 시 저장한 토큰의 사용자 id
     if (result.length > 0) {
       res.json({ success: true, data: result[0] });
@@ -114,6 +113,7 @@ app.post("/user/login", async (req, res) => {
           message: "로그인 성공!",
           accessToken,
           refreshToken,
+          user,
         });
       } else {
         res.status(401).json({

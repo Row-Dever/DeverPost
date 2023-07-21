@@ -1,20 +1,21 @@
 <template>
   <div>
+    <li>
+      <dt>안녕하세요.</dt>
+      <dd>{{ user.username }}</dd>
+      <dd>님 반갑습니다 !</dd>
+    </li>
     <ul v-if="user">
       <li>
-        <dt>이름</dt>
+        <dt>이름:</dt>
         <dd>{{ user.username }}</dd>
       </li>
       <li>
-        <dt>이메일</dt>
+        <dt>이메일:</dt>
         <dd>{{ user.email }}</dd>
       </li>
       <li>
-        <dt>비밀번호</dt>
-        <dd>{{ user.password }}</dd>
-      </li>
-      <li>
-        <dt>전화번호</dt>
+        <dt>전화번호 :</dt>
         <dd>{{ user.telephone }}</dd>
       </li>
     </ul>
@@ -38,18 +39,18 @@ const props = defineProps(['user'])
 }
 
 ul {
-  margin: 20px;
+  margin: 50px;
 }
 
 li {
   display: flex;
   align-items: center;
   justify-content: start;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   list-style-type: none;
 }
 
 dt {
-  margin-right: 4px;
+  margin-right: 10px;
 }
 </style>

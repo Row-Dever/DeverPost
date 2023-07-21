@@ -48,7 +48,7 @@ const login = async () => {
     if (data.success) {
       console.log('로그인 성공!')
       // localStorage.setItem('user', JSON.stringify(data.result)) // 유저 데이터를 localStorage에 저장
-      userStore.loginSuccess(data.result, data.accessToken, data.refreshToken)
+      userStore.loginSuccess(data.user, data.accessToken, data.refreshToken)
       // 로그인 성공 시 마이페이지로 이동
       router.push('/mypage')
       // result.value = data.result

@@ -47,7 +47,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { getCurrentInstance } from 'vue'
+import Input from '@/Input/Input.vue'
 
 const username = ref('')
 const email = ref('')

@@ -24,7 +24,6 @@ onMounted(async () => {
       loggedInUser.value = {
         username: userData.username,
         email: userData.email,
-        password: userData.password,
         telephone: userData.telephone
       }
     } else {
