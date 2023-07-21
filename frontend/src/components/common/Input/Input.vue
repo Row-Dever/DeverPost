@@ -6,12 +6,16 @@
       :type="props.type"
       v-model="value"
       class="border-b-2 focus:border-orange-300 outline-none"
+      @input="onValidationHandler"
     />
-    <p v-if="error" class="absolute -bottom-5 text-sm font-medium text-red-500">{{ error }}</p>
+    <p v-if="!validationData.isValid" class="absolute -bottom-5 text-sm font-medium text-red-500">
+      {{ validationData.errmessage }}
+    </p>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -20,10 +24,18 @@ const props = defineProps({
   type: { type: String, default: 'text' },
   input: String,
   modelValue: String,
-  error: String
+  onvalidation: Function
 })
 
-const emit = defineEmits(['update:modelValue'])
+const validationData = ref({})
+
+const emit = defineEmits(['update:modelValue', 'on-valid'])
+
+const onValidationHandler = (e) => {
+  const validData = props.onvalidation(e.target.value)
+  validationData.value = validData
+  emit('on-valid', validData)
+}
 
 const value = computed({
   get() {

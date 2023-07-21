@@ -1,7 +1,7 @@
 <template>
   <section>
     <Container>
-      <h2 class="text-2xl ir">홈페이지</h2>
+      <h2 class="ir">홈페이지</h2>
       <PostList />
     </Container>
   </section>

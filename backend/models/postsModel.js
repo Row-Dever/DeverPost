@@ -1,51 +1,65 @@
-// import db from "../util/database.js";
+import db from "../util/database.js";
 
 export default class Posts {
-  constructor(title, description, imgSrc, category, userName, userId) {
+  constructor(title, content, category, userId, imgsrc) {
     this.id = null;
     this.title = title;
-    this.description = description;
-    this.imgSrc = imgSrc;
-    this.userName = userName;
-    this.userId = userId;
+    this.content = content;
     this.category = category;
+    this.userId = userId;
+    this.imgsrc = imgsrc;
   }
 
-  //   save() {
-  //     console.log("save");
-  //     return db.query(
-  //       "INSERT INTO posts (title, description, imgSrc, userName, userId, category, created_at) VALUES(?, ?, ?, ?, ?, ?, NOW())",
-  //       [
-  //         this.title,
-  //         this.description,
-  //         this.imgSrc,
-  //         this.userName,
-  //         this.userId,
-  //         this.category,
-  //       ]
-  //     );
-  //   }
+  save() {
+    return db.query(
+      "INSERT INTO posts (title, content, category, userId, imgsrc, created_at) VALUES(?, ?, ?, ?, ?, NOW())",
+      [this.title, this.content, this.category, this.userId, this.imgsrc]
+    );
+  }
 
-  //   static deleteById(id) {
-  //     return db.query("DELETE FROM posts WHERE id = ?", [id]);
-  //   }
+  static deleteById(id) {
+    return db.query("DELETE FROM posts WHERE id = ?", [id]);
+  }
 
-  //   static fetchAll(limit, start) {
-  //     return db.execute("SELECT * FROM posts ORDER BY id DESC LIMIT ? , ?", [
-  //       start,
-  //       limit,
-  //     ]);
-  //   }
+  static fetchData(limit, cursorId) {
+    if (cursorId) {
+      return db.execute(
+        "SELECT p.id, p.created_at, p.title, p.content, p.category, p.imgsrc, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id WHERE p.id < ? ORDER BY p.id DESC LIMIT ?",
+        [cursorId, limit]
+      );
+    } else {
+      return db.execute(
+        "SELECT p.id, p.created_at, p.title, p.content, p.category, p.imgsrc, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id ORDER BY p.id DESC LIMIT ?",
+        [limit]
+      );
+    }
+  }
 
-  //   static findById(id) {
-  //     return db.query("SELECT * FROM posts WHERE id = ?", [id]);
-  //   }
+  static fetchKeywordData(limit, cursorId, keyword) {
+    if (cursorId) {
+      return db.execute(
+        "SELECT p.id, p.created_at, p.title, p.content, p.category, p.imgsrc, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id WHERE p.id < ? && p.title like CONCAT('%', ?, '%') ORDER BY p.id DESC LIMIT ?",
+        [cursorId, keyword, limit]
+      );
+    } else {
+      return db.execute(
+        "SELECT p.id, p.created_at, p.title, p.content, p.category, p.imgsrc, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id WHERE p.title like CONCAT('%', ?, '%') ORDER BY p.id DESC LIMIT ?",
+        [keyword, limit]
+      );
+    }
+  }
 
-  //   static updateById(id, title, description) {
-  //     console.log("updated");
-  //     return db.query(
-  //       "UPDATE posts SET title = ?, description = ?, created_at = NOW() WHERE id = ?",
-  //       [title, description, id]
-  //     );
-  //   }
+  static findById(id) {
+    return db.query(
+      "SELECT p.id, p.title, p.content, p.category, p.imgsrc, p.created_at, p.userid, u.username FROM posts as p INNER JOIN users as u ON p.userid = u.id WHERE p.id = ?",
+      [id]
+    );
+  }
+
+  static updateById(id, title, content, category, imgsrc) {
+    return db.query(
+      "UPDATE posts SET title = ?, content = ?, category = ?, imgsrc = ?, created_at = NOW() WHERE id = ?",
+      [title, content, category, imgsrc, id]
+    );
+  }
 }

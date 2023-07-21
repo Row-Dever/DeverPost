@@ -1,52 +1,63 @@
 import Posts from "../models/postsModel.js";
 
 export const getPosts = (req, res, next) => {
-  // 15
-  const { limit, skip } = req.query;
+  const { limit, cursorId } = req.query;
+  let nextCursor;
 
-  let start = 0;
-  console.log(skip);
-  if (skip <= 0) {
-    start = 1;
-  } else {
-    start = (skip - 1) * limit;
-  }
-
-  console.log(start);
-
-  Posts.fetchAll(limit, String(start))
+  Posts.fetchData(limit, Number(cursorId))
     .then(([rows, fieldData]) => {
-      res.status(200).json(rows);
-    })
-    .catch((err) => console.log(err));
-};
-
-export const addPost = (req, res, next) => {
-  const { title, description, imgSrc, category, userName, userId } = req.body;
-
-  const post = new Posts(
-    title,
-    description,
-    imgSrc,
-    category,
-    userName,
-    userId
-  );
-
-  post
-    .save()
-    .then(() => {
-      res.status(201).json({
-        message: "데이터 저장",
-        post: post,
+      nextCursor =
+        rows.length === Number(limit) ? rows[rows.length - 1].id : null;
+      res.status(200).json({
+        statsCode: 200,
+        message: "데이터를 성공적으로 가져왔습니다.",
+        data: rows,
+        nextCursor,
       });
     })
-    .catch((error) => console.log(error));
+    .catch((err) => next(err));
+};
+
+export const getKeywordPosts = async (req, res, next) => {
+  const { limit, cursorId, keyword } = req.query;
+  let nextCursor;
+
+  if (keyword === "undefined") {
+    Posts.fetchData(limit, Number(cursorId))
+      .then(([rows, fieldData]) => {
+        nextCursor =
+          rows.length === Number(limit) ? rows[rows.length - 1].id : null;
+        res.status(200).json({
+          statsCode: 200,
+          message: "데이터를 성공적으로 가져왔습니다.",
+          data: rows,
+          nextCursor,
+        });
+      })
+      .catch((err) => next(err));
+  } else {
+    Posts.fetchKeywordData(limit, Number(cursorId), keyword)
+      .then(([rows, fieldData]) => {
+        let message = "데이터를 성공적으로 가져왔습니다.";
+        if (rows.length === 0) {
+          message = "원하는 데이터를 찾지 못했습니다.";
+        }
+        nextCursor =
+          rows.length === Number(limit) ? rows[rows.length - 1].id : null;
+        res.status(200).json({
+          statsCode: 200,
+          message,
+          data: rows,
+          nextCursor,
+        });
+      })
+      .catch((err) => next(err));
+  }
 };
 
 export const getPost = async (req, res, next) => {
   try {
-    const postId = req.params.postId;
+    const { postId } = req.params;
     const [rows, fieldData] = await Posts.findById(postId);
     const [data] = rows;
     res.status(200).json(data);
@@ -55,20 +66,54 @@ export const getPost = async (req, res, next) => {
   }
 };
 
+export const addPost = (req, res, next) => {
+  const { title, content, category, userId } = req.body;
+  const imgReg = /<img[^>]+src\s*=\s*['"]([^'"]+)['"][^>]*>/;
+  let imgSrc = imgReg.exec(content);
+
+  if (imgSrc) {
+    imgSrc = imgSrc[1];
+  } else {
+    imgSrc = null;
+  }
+  const post = new Posts(title, content, category, userId, imgSrc);
+
+  post
+    .save()
+    .then(() => {
+      res.status(201).json({
+        statsCode: 201,
+        message: "데이터 저장이 완료되었습니다.",
+        post: post,
+      });
+    })
+    .catch((error) => console.log(error));
+};
+
 export const delPost = async (req, res, next) => {
   const postId = req.params.postId;
   await Posts.deleteById(postId);
   res.status(200).json({
+    statsCode: 200,
     message: "데이터가 성공적으로 삭제되었습니다.",
   });
 };
 
 export const updatePost = async (req, res, next) => {
   const postId = req.params.postId;
-  const { title, description } = req.body;
-  await Posts.updateById(postId, title, description);
+  const { title, content, category } = req.body;
+  const imgReg = /<img[^>]+src\s*=\s*['"]([^'"]+)['"][^>]*>/;
+  let imgSrc = imgReg.exec(content);
+
+  if (imgSrc) {
+    imgSrc = imgSrc[1];
+  } else {
+    imgSrc = null;
+  }
+  await Posts.updateById(postId, title, content, category, imgSrc);
 
   res.status(200).json({
-    message: "데이터가 성공적으로 변경되었습니다.",
+    statsCode: 200,
+    message: "데이터가 성공적으로 변경 되었습니다.",
   });
 };

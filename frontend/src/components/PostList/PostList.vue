@@ -1,70 +1,71 @@
 <template>
-  <!-- <Loading v-if="postData.length === 0" /> -->
+  <div
+    v-if="message === '원하는 데이터를 찾지 못했습니다.'"
+    class="mt-32 text-2xl text-center font-semibold"
+  >
+    게시물 존재하지 않습니다.
+  </div>
   <ul
     ref="listEl"
-    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 gap-y-4 pb-8"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 gap-y-4"
   >
     <template v-for="post in postData" :key="post.id"
-      ><PostItem :post="post" :title="postData[0].title" @set-post="setPost" />
+      ><PostItem :post="post" :title="postData[0].title" />
     </template>
   </ul>
-  <InfiniteLoading @infinite="infiniteHandler">
-    <template #complete>
-      <span>데이터가 모두 전송되었습니다.</span>
-    </template>
+  <InfiniteLoading
+    :identifier="infiniteId"
+    @infinite="infiniteHandler"
+    spinner="waveDots"
+    distance="10"
+  >
+    <template #complete><span></span></template>
   </InfiniteLoading>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import InfiniteLoading from 'v3-infinite-loading'
-
 import PostItem from '../PostItem/PostItem.vue'
 
 import { instance } from '../../api/axiosBase'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const listEl = ref(null)
 const postData = ref([])
-const limit = 15
+const limit = 10
 
-const skip = ref(0)
+const infiniteId = ref(0)
+const message = ref('')
+let cursorId
+
+watch(
+  () => {
+    return route.params.keyword
+  },
+  () => {
+    postData.value = []
+    changeInfiniteId()
+  }
+)
+
+const changeInfiniteId = () => {
+  infiniteId.value += 1
+}
 
 const infiniteHandler = async ($state) => {
-  console.log('handler')
-  skip.value++
-  console.log(postData)
-  // const res = await fetch('/data/postData.json')
-
-  // fetch
-  // const res = await fetch('http://localhost:8080/')
-  // const postsData = await res.json()
-  // console.log(postsData)
-  // postData.value = postsData
-
-  const { data } = await instance.get(`/post/?limit=${limit}&skip=${skip.value}`)
-  console.log(data)
-  if (data.length < 10) {
-    postData.value.push(...data)
-    console.log('데이터 전송 마지막')
+  const { data: posts } = await instance.get(
+    `/post/?limit=${limit}&cursorId=${cursorId}&keyword=${route.params.keyword}`
+  )
+  cursorId = posts.nextCursor
+  message.value = posts.message
+  postData.value.push(...posts.data)
+  if (cursorId === null) {
     $state.complete()
   } else {
-    postData.value.push(...data)
     $state.loaded()
   }
 }
-
-// onMounted(
-//   debounce(async () => {
-//     // const res = await fetch('/data/postData.json')
-
-//     // fetch
-//     // const res = await fetch('http://localhost:8080/')
-//     // const postsData = await res.json()
-//     // console.log(postsData)
-//     // postData.value = postsData
-//     const { data } = await instance.get(`/post/?limit=${limit}&skip=0`)
-
-//     postData.value = data
-//   })
-// )
 </script>

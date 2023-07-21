@@ -5,17 +5,18 @@ import {
   getPost,
   delPost,
   updatePost,
+  getKeywordPosts,
 } from "../controllers/postsController.js";
 
 const router = express.Router();
 
 router.use("/", (req, res, next) => {
-  console.log("Post Router!!!!");
+  console.log("Post Router!!!");
   next();
 });
 
 // /post
-router.get("/", getPosts);
+router.get("/", getKeywordPosts);
 
 // /post
 router.post("/", addPost);
