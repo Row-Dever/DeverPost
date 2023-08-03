@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 const url = 'http://localhost:8800/'
-
 export const instance = axios.create({
   baseURL: url,
   headers: {
@@ -19,7 +18,6 @@ export const imgInstance = axios.create({
 export const accessInstance = axios.create({
   baseURL: url,
   headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+    'Content-Type': 'application/json'
   }
 })
